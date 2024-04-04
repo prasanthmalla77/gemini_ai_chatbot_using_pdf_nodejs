@@ -96,7 +96,7 @@ export async function run(question) {
 
   const bestPassage = await FindBestPassage(question, storedEmbeddings, model);
   const answer = await FindAnswer(bestPassage, question);
-  // console.log("Best answer:", bestPassage);
+  console.log("Best answer:", bestPassage);
   return answer
 }
 
