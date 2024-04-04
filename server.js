@@ -1,20 +1,22 @@
-// Import required modules
 import express from 'express';
+import bodyParser from 'body-parser';
 import { run } from './main.js';
 
-// Create an Express application
-const app = express();
-const port = process.env.PORT || 3000; // Set port
+  const app = express();
 
-// Define routes
+app.use(bodyParser.json());
+const port = process.env.PORT || 3000;
+
 app.get('/', (req, res) => {
   res.send('Hello, World! This is Express.js.');
 });
-app.post('/chatbot/:id', (req, res) => {
-    const question = req.body;
+
+app.post('/chatbot', async (req, res) => {
+    const {question} = req.body;
     console.log(question);
+    const answer = await run(question);
     res.json({
-        message: "received"
+        message: answer
     });
 });
 

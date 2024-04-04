@@ -77,7 +77,9 @@ async function FindAnswer(passage, prompt) {
   return result.response.text();
 }
 
-export async function run() {
+export async function run(question) {
+
+  console.log("Question received: ", question);
   const model = genAI.getGenerativeModel({
     model: "embedding-001",
     generationConfig,
@@ -93,11 +95,12 @@ export async function run() {
     return;
   }
 
-  const question = "tell me the branches offered in course of study?"; 
   const bestPassage = await FindBestPassage(question, storedEmbeddings, model);
   const answer = await FindAnswer(bestPassage, question);
-
-  console.log(answer);
+  // console.log("Best answer:", bestPassage);
+  console.log("Question :", question);
+  console.log("-------------------------");
+  console.log("Answer :",answer);
+  return answer
 }
 
-run();
