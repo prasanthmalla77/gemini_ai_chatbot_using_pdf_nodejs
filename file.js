@@ -4,7 +4,7 @@ const require = createRequire(import.meta.url);
 const fs = require("fs");
 const pdfParse = require("pdf-parse");
 
-let dataBuffer = fs.readFileSync("User.pdf");
+let dataBuffer = fs.readFileSync("./User.pdf");
 
 // Function to parse the PDF
 function parsePdf() {

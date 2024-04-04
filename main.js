@@ -79,7 +79,6 @@ async function FindAnswer(passage, prompt) {
 
 export async function run(question) {
 
-  console.log("Question received: ", question);
   const model = genAI.getGenerativeModel({
     model: "embedding-001",
     generationConfig,
@@ -98,9 +97,6 @@ export async function run(question) {
   const bestPassage = await FindBestPassage(question, storedEmbeddings, model);
   const answer = await FindAnswer(bestPassage, question);
   // console.log("Best answer:", bestPassage);
-  console.log("Question :", question);
-  console.log("-------------------------");
-  console.log("Answer :",answer);
   return answer
 }
 
