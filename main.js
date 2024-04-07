@@ -32,6 +32,7 @@ async function generateContextEmbeddings(texts, model) {
       };
     })
   );
+  console.log("Context embeddings generated:", passages);
   return passages;
 }
 
@@ -60,6 +61,7 @@ async function FindBestPassage(question, storedEmbeddings, model) {
 
   if (dotProducts[maxIndex] > threshold) {
     const answer = await newModel.generateContent(prompt);
+    console.log("Generated answer:", answer);
     if (
       answer.response &&
       answer.response.candidates &&
@@ -68,12 +70,14 @@ async function FindBestPassage(question, storedEmbeddings, model) {
       return answer.response.candidates[0].content.parts[0].text;
     }
   } else {
+    console.log("Threshold not met.");
     return "I'm sorry, I couldn't find a relevant answer to your question.";
   }
 }
 
 async function FindAnswer(passage, prompt) {
   const result = await newModel.generateContent("in this paragraph: " + passage + "  question: " + prompt);
+  console.log("Answer generated:", result);
   return result.response.text();
 }
 
@@ -84,19 +88,24 @@ export async function run(question) {
     generationConfig,
   });
 
+  console.log("Model initialized.");
+
   const texts = await parsePdf();
+  console.log("PDF parsed. Texts:", texts);
   contextEmbeddings = await generateContextEmbeddings(texts, model);
 
   let storedFile = "test";
   const storedEmbeddings = await loadStoredEmbeddings(storedFile);
+  console.log("Stored embeddings loaded.");
 
   if (!Array.isArray(storedEmbeddings)) {
+    console.log("Stored embeddings not found.");
     return;
   }
 
   const bestPassage = await FindBestPassage(question, storedEmbeddings, model);
+  console.log("Best passage:", bestPassage);
   const answer = await FindAnswer(bestPassage, question);
-  console.log("Best answer:", bestPassage);
-  return answer
+  console.log("Final answer:", answer);
+  return answer;
 }
-
